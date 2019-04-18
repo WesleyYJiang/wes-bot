@@ -1,0 +1,26 @@
+import os
+import json
+import codecs
+import csv
+
+directory = "/Users/wesleyjiang/Downloads/datasets-CMU_DoG-master/Conversations/test"
+count = 0
+lines = []
+for root,dirs,files in os.walk(directory):
+    for name in files:
+        with open(os.path.join(root, name)) as f:
+            datastore = json.load(f)
+            for history in datastore["history"]:
+                count = count + 1
+                lines.append(history["text"])
+
+delimiter = '\t'
+delimiter = str(codecs.decode(delimiter, "unicode_escape"))
+
+datafile = os.path.join("movie_convo_formatted3.txt")
+
+with open(datafile, 'w', encoding='utf-8') as outputfile:
+    writer = csv.writer(outputfile, delimiter=delimiter)
+    for i in range(107792):
+        if i%2 == 0:
+            writer.writerow([lines[i], lines[i+1]])

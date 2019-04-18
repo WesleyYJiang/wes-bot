@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>The bot</title>
+</head>
+<body>
+<div class="position-relative overflow-hidden text-center bg-light">
+    <div class="col-md-5 p-lg-5 mx-auto my-5">
+        <h1 class="display-4 font-weight-normal">The Bot</h1>
+        <p class="lead font-weight-normal">Not the smartest, but I am trying...</p>
+    </div>
+    <div class="product-device box-shadow d-none d-md-block"></div>
+    <div class="product-device product-device-2 box-shadow d-none d-md-block"></div>
+</div>
+<div class="bg-dark mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white" style="height: 70vw">
+    <div class="my-3 py-3">
+        <h2 class="display-5 mb-4">Talk to me</h2>
+                  <div class="info-form">
+                      <h3 style='color: #ccc;font-size: 30px;'>Say something...</h3>
+                      <div class="message_holder"></div>
+
+                        <form action="" class="form-inline mt-4 justify-content-center" method='post'>
+                            <div class="form-group mx-2">
+                                <label class="sr-only">Username</label>
+                                <input type="text" class="form-control username" placeholder="Who are you?">
+                            </div>
+                            <div class="form-group mx-2">
+                                <label class="sr-only">Input</label>
+                                <input type="text" class="form-control message"  placeholder="What?">
+                            </div>
+                            <button type="submit" class="btn btn-success mx-2">Enter</button>
+                        </form>
+                    </div>
+    </div>
+</div>
+
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
+<link rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+{#<script src="https://bot-wes.herokuapp.com/socket.io/socket.io.js"></script>#}
+
+<script type="text/javascript">
+    var socket = io.connect('http://' + document.domain + ':' + location.port);
+    socket.on('connect', function () {
+        socket.emit('my event', {
+            data: 'User Connected'
+        });
+        var form = $('form').on('submit', function (e) {
+            e.preventDefault()
+            let user_name = $('input.username').val()
+            let user_input = $('input.message').val()
+            socket.emit('my event', {
+                user_name: user_name,
+                message: user_input
+            });
+            $('input.message').val('').focus()
+        })
+    })
+    socket.on('my response', function (msg) {
+        console.log(msg)
+        if (typeof msg.user_name !== 'undefined') {
+            $('h3').remove()
+            $('div.message_holder').append('<div><b style="color: Pink">' + msg
+                    .user_name +
+                '</b> ' + msg.message + '</div>')
+        }
+    })
+</script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>

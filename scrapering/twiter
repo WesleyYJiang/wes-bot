@@ -1,0 +1,23 @@
+import codecs
+import os
+import csv
+
+with open("/Users/wesleyjiang/Desktop/twitter_en.txt", 'r') as datafile:
+    lines = []
+    for line in datafile:
+        line = line.rstrip()
+        lines.append(line)
+
+# print(count)
+
+delimiter = '\t'
+# Unescape the delimiter
+delimiter = str(codecs.decode(delimiter, "unicode_escape"))
+
+datafile = os.path.join("twitter.txt")
+
+with open(datafile, 'w', encoding='utf-8') as outputfile:
+    writer = csv.writer(outputfile, delimiter=delimiter)
+    for i in range(754530):
+        if i%2 == 0:
+            writer.writerow([lines[i], lines[i+1]])
